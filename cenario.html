@@ -18,7 +18,7 @@
 
 <body>
     <script src="/three.js"></script>
-    <script src="/loders.js"></script>
+    <script src="/loaders.js"></script>
     <script src="/OrbitControls.js"></script>
     <script>
         const scene = new THREE.Scene();
@@ -38,6 +38,7 @@
         // Montanhas
         const mountainGeometry = new THREE.ConeGeometry(5, 20, 4);
         const mountainMaterial = new THREE.MeshBasicMaterial({ color: 0xA0522D });
+
         const mountain1 = new THREE.Mesh(mountainGeometry, mountainMaterial);
         mountain1.position.set(-20, 10, -20);
         scene.add(mountain1);
@@ -45,6 +46,39 @@
         const mountain2 = new THREE.Mesh(mountainGeometry, mountainMaterial);
         mountain2.position.set(20, 10, -20);
         scene.add(mountain2);
+
+        const mountain3 = new THREE.Mesh(mountainGeometry, mountainMaterial);
+        mountain3.position.set(0, 10, -30);
+        scene.add(mountain3);
+
+        // Adicionando pequenas pedras
+        const rockGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+        const rockMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+        for (let i = 0; i < 20; i++) {
+            const rock = new THREE.Mesh(rockGeometry, rockMaterial);
+            rock.position.set(
+                Math.random() * 80 - 40,
+                0.25,
+                Math.random() * 80 - 40
+            );
+            scene.add(rock);
+        }
+
+        // Adicionando uma pequena casa
+        const houseGeometry = new THREE.BoxGeometry(5, 3, 5); // Corpo da casa
+        const houseMaterial = new THREE.MeshBasicMaterial({ color: 0x8B0000 }); // Cor da casa
+        const house = new THREE.Mesh(houseGeometry, houseMaterial);
+        house.position.set(-10, 1.5, -10); // Posição da casa
+        scene.add(house);
+
+        // Telhado da casa
+        const roofGeometry = new THREE.ConeGeometry(3.5, 2, 4); // Telhado
+        const roofMaterial = new THREE.MeshBasicMaterial({ color: 0x654321 }); // Cor do telhado
+        const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+        roof.position.set(-10, 4.5, -10); // Posição do telhado
+        roof.rotation.y = Math.PI / 4; // Rotação do telhado
+        scene.add(roof);
 
         // Iluminação
         const ambientLight = new THREE.AmbientLight(0x404040);
@@ -62,8 +96,16 @@
         // Animação
         function animate() {
             requestAnimationFrame(animate);
+            controls.update(); // Adicionado para que os controles funcionem corretamente
             renderer.render(scene, camera);
         }
+
+        // Responsividade
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
         animate();
     </script>
